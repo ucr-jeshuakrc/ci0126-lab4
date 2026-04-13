@@ -16,5 +16,16 @@ namespace backend.Repositories
             string query = "SELECT * FROM dbo.Country";
             return connection.Query<CountryModel>(query).ToList();
         }
+
+        public bool CreateCountry(CountryModel country) {
+            using var connection = new SqlConnection(_connectionString);
+            var query = @"INSERT INTO [dbo].[Country]([Name],[Language],[Continent]) VALUES (@Name, @Language, @Continent)";
+            var affectedRows = connection.Execute(query, new {
+                Name = country.Name,
+                Language = country.Language,
+                Continent = country.Continent
+            });
+            return affectedRows >= 1;
+        }
     }
 }
